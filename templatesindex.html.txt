@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Binary Options Signals</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
+    h1 { margin-bottom: 20px; }
+    .signal { font-size: 32px; font-weight: bold; }
+    .CALL { color: green; }
+    .PUT { color: red; }
+    .NONE { color: gray; }
+  </style>
+</head>
+<body>
+  <h1>📊 Daily Binary Options Signal</h1>
+  <div class="signal {{data.signal}}">
+    {{ data.signal }} (RSI: {{ data.rsi }})
+  </div>
+  <button onclick="refresh()">🔄 Refresh</button>
+
+  <script>
+    function refresh() {
+      fetch("/signal")
+        .then(res => res.json())
+        .then(data => {
+          const div = document.querySelector('.signal');
+          div.innerText = data.signal + " (RSI: " + data.rsi + ")";
+          div.className = "signal " + data.signal;
+        });
+    }
+  </script>
+</body>
+</html>
