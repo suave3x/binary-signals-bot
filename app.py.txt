@@ -4,10 +4,13 @@ import ta
 
 app = Flask(__name__)
 
-# Dummy candle data (replace with broker API later)
+# Dummy candles for example (replace with broker API later)
 def get_candles():
     data = {
-        "close": [1.101, 1.102, 1.099, 1.100, 1.098, 1.103, 1.105]
+        "open":  [1.100, 1.102, 1.101, 1.098, 1.099, 1.100, 1.102],
+        "high":  [1.103, 1.104, 1.102, 1.101, 1.100, 1.105, 1.106],
+        "low":   [1.098, 1.100, 1.099, 1.097, 1.097, 1.099, 1.101],
+        "close": [1.102, 1.101, 1.100, 1.099, 1.100, 1.103, 1.105]
     }
     return pd.DataFrame(data)
 
@@ -17,11 +20,11 @@ def generate_signal():
     latest_rsi = df['rsi'].iloc[-1]
 
     if latest_rsi > 70:
-        return {"signal": "PUT", "rsi": round(latest_rsi, 2)}
+        return {"signal": "PUT", "rsi": round(latest_rsi, 2), "data": df.to_dict(orient="records")}
     elif latest_rsi < 30:
-        return {"signal": "CALL", "rsi": round(latest_rsi, 2)}
+        return {"signal": "CALL", "rsi": round(latest_rsi, 2), "data": df.to_dict(orient="records")}
     else:
-        return {"signal": "NONE", "rsi": round(latest_rsi, 2)}
+        return {"signal": "NONE", "rsi": round(latest_rsi, 2), "data": df.to_dict(orient="records")}
 
 @app.route("/")
 def dashboard():
